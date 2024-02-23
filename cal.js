@@ -10,6 +10,7 @@ var sex = document.getElementsByName('sex');
     height = Number(height.value);
     Scr = Number(Scr.value);
     weigh = Number(weigh.value);
+    let crcl = ((140-age)*weigh)/(Scr*72) ;
     let outHTML = '';
     
     // for(let i=0;i<=sex.length;i++){
@@ -19,12 +20,12 @@ var sex = document.getElementsByName('sex');
     // }
         if(sex[0].checked){
             outHTML += "<p>" ;
-            outHTML += (((140-age)*weigh)*0.85)/(Scr*72) ;
+            outHTML += crcl*0.85 ;
             outHTML += "ml/min    (female x 0.85)</p>";
         }
         else if (sex[1].checked){ 
             outHTML += "<p>" ;
-            outHTML += ((140-age)*weigh)/(Scr*72) ;
+            outHTML += crcl ;
             outHTML += "ml/min      </p>";
         }
         else {
