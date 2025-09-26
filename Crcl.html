@@ -1,53 +1,2133 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>therapy</title>
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ระบบดูแลไตและการปรับยา</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Font Awesome CDN สำหรับไอคอน -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts (Kanit) -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        nav{
-            width: 200px;
-            height: auto;
-            background-color: olivedrab;
+        /* สไตล์พื้นฐานของ Body */
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #fbe9e7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        button {
-		    background-color :blue;
-            border: none;   
-            color: white;
-            padding: 10px 17px;
+
+        /* การปรับแต่ง Navbar */
+        .navbar {
+            background-color: #d84315;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #fff !important;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand i {
+            margin-right: 8px;
+            font-size: 1.2em;
+        }
+        .navbar-nav .nav-link {
+            color: #fff !important;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:hover {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        /* การปรับแต่ง Tab Container */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            background-color: #ffab91;
+            padding: 0;
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .tab {
+            flex: 1;
             text-align: center;
-            text-decoration: none;
-            display: blue;
-            font-size: 16px;
-            margin: 4px 2px;
+            padding: 15px 0;
             cursor: pointer;
-}
+            background-color: #fff;
+            color: #495057;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-right: 1px solid #ff7043;
+        }
+        .tab:last-child {
+            border-right: none;
+        }
+        .tab.active {
+            background-color: #d84315;
+            color: #fff;
+            font-weight: bold;
+        }
+        .tab:hover:not(.active) {
+            background-color: #ff5722;
+        }
+
+        /* สไตล์ทั่วไปของเนื้อหา Tab */
+        .tab-content {
+            display: none;
+            padding: 30px 0;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* สไตล์ Card สำหรับแต่ละส่วนเนื้อหา */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+        .card-header {
+            background-color: #d84315;
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            padding: 15px 20px;
+        }
+        .card-body {
+            padding: 25px;
+        }
+
+        /* สไตล์ Button Box */
+        .button-box {
+            background-color: #ff7043;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .button-box .btn {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        /* สไตล์ Form Control */
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #343a40;
+        }
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid #ff7043;
+            padding: 10px 15px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #d84315;
+            box-shadow: 0 0 0 0.25rem rgba(216, 67, 21, 0.25);
+        }
+
+        /* สไตล์ปุ่ม */
+        .btn-primary {
+            background-color: #d84315;
+            border-color: #d84315;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #b0300f;
+            border-color: #87230d;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        /* การแสดงผลลัพธ์ */
+        .result-box {
+            background-color: #ffe0b2;
+            border: 1px solid #e65100;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+        .result-box.error {
+            background-color: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        .result-box.warning {
+            background-color: #fffde7;
+            border-color: #ffeb3b;
+            color: #f9a825;
+        }
+        
+        /* สไตล์สำหรับ "ไม่" และไอคอนไต */
+        .result-box u, .popup u {
+            color: #dc3545;
+        }
+        .result-box .fa-kidneys, .popup .fa-kidneys {
+            color: #e62020;
+            margin-right: 5px;
+        }
+
+        /* Popup */
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 3px solid #d84315;
+            padding: 30px 40px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1050;
+            display: none;
+            text-align: center;
+        }
+        .popup.positive, .popup.negative, .popup.info {
+            border-color: #d84315;
+            color: #333;
+        }
+
+        /* การปรับแต่งสำหรับ Responsive */
+        @media (max-width: 768px) {
+            .tab-container {
+                flex-direction: column;
+            }
+            .tab {
+                border-bottom: 1px solid #ff7043;
+                border-right: none;
+            }
+            .tab:last-child {
+                border-bottom: none;
+            }
+        }
+
+        /* สไตล์ Overlay และหน้าอ้างอิง */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1060;
+            display: none;
+        }
+
+        .reference-page {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            color: #333;
+        }
+
+        .reference-page h2 {
+            color: #d84315;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .reference-page ul {
+            list-style-type: decimal;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .reference-page ul li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .reference-page .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .reference-page .close-btn:hover {
+            color: #d84315;
+        }
+
+        /* สไตล์เดิมจากโค้ดของคุณที่ปรับให้เข้ากับการทำงาน */
+        .drug-checker {
+            background-color: #ffffff;
+            font-family: 'Kanit', sans-serif;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        .drug-checker .header {
+            display: none;
+        }
+
+        .drug-checker .container {
+            margin: 0px auto;
+            display: flex;
+            width: 100%;
+            max-width: none;
+            box-shadow: none;
+            border-radius: 0px;
+            overflow: hidden;
+            border: 1px solid #ff7043;
+            border-radius: 6px;
+        }
+        .drug-checker .select-label,
+        .drug-checker .answer-label {
+            display: none;
+        }
+
+        .drug-checker .select-input,
+        .drug-checker .answer-content {
+            flex: 1;
+            background-color: #fff;
+            padding: 10px 15px;
+            font-size: 1em;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+        }
+
+        .drug-checker input.select-input {
+            font-size: 1em;
+        }
+        
+        .drug-checker .check-button {
+            display: none;
+        }
+
+        .drug-checker .popup {
+            border: 3px solid #d84315;
+            font-size: 1.5em;
+            padding: 30px 40px;
+            color: #333;
+        }
+
+        /* สไตล์สำหรับ Tab 3 (เดิมคือ Tab 2) */
+        #tab3 .container {
+            max-width: 960px;
+            margin: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        }
+
+        #tab3 h2 {
+            background-color: #d84315;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        #tab3 table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        #tab3 table, #tab3 th, #tab3 td {
+            border: 1px solid #ff7043;
+        }
+
+        #tab3 th, #tab3 td {
+            padding: 8px;
+            background-color: #ffe5dd;
+            text-align: center;
+        }
+        #tab3 thead th {
+            background-color: #d84315;
+            color: white;
+        }
+
+        #tab3 input, #tab3 select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ff7043;
+        }
+
+        /* ปุ่มใน Tab 3 (เดิมคือ Tab 2) */
+        #tab3 button {
+            padding: 10px 20px;
+            background-color: #d84315;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+        }
+
+        #tab3 button:hover {
+            background-color: #b0300f;
+        }
+
+        /* สไตล์หน้า Login */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fbe9e7;
+            padding: 20px;
+        }
+
+        .login-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            color: #d84315;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .login-card .form-control {
+            margin-bottom: 20px;
+        }
+
+        .login-card .btn-primary {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+        }
+
+        .login-error {
+            color: #dc3545;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* สัญลักษณ์โหลดสำหรับข้อมูล HN */
+        .loading-spinner {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #d84315;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div>
-        <h1>CrCl</h1>
+
+    <!-- หน้า Login -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <h2><i class="fas fa-user-circle me-2"></i> เข้าสู่ระบบ</h2>
+            <div class="mb-3">
+                <input type="text" id="usernameInput" class="form-control" placeholder="ชื่อผู้ใช้" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" id="passwordInput" class="form-control" placeholder="รหัสผ่าน" required>
+            </div>
+            <button class="btn btn-primary" id="loginBtn">เข้าสู่ระบบ</button>
+            <div id="loginError" class="login-error" style="display: none;">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</div>
+        </div>
     </div>
-    <div>
-        <input type="radio" name="sex" value="female" > female
-        <input type="radio" name="sex" value="male" > male  
+
+    <!-- เนื้อหาแอปพลิเคชันหลัก (จะซ่อนอยู่จนกว่าจะ Login สำเร็จ) -->
+    <div id="mainApp" style="display: none;">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid container-xl">
+                <a class="navbar-brand" href="#">
+                    <i class="fas fa-hand-holding-medical"></i> ระบบดูแลไตและยา
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#" data-tab-target="tab1">ตรวจสอบยา</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-tab-target="tab2">ปรับยาตาม HN</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-tab-target="tab3">คำนวณค่าไต</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" id="referenceLink">อ้างอิง</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container container-xl">
+            <div class="tab-container">
+                <div class="tab active" data-tab="tab1">
+                    <i class="fas fa-prescription-bottle-alt me-2"></i> การตรวจสอบยา
+                </div>
+                <div class="tab" data-tab="tab2">
+                    <i class="fas fa-notes-medical me-2"></i> ปรับยาตาม HN
+                </div>
+                <div class="tab" data-tab="tab3">
+                    <i class="fas fa-calculator me-2"></i> การคำนวณค่าไตและการปรับยา
+                </div>
+            </div>
+
+            <div id="tab1" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-search me-2"></i> ตรวจสอบ: รายการยาที่ต้องมีการปรับตามไต
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="drugInput" class="form-label">เลือก/พิมพ์ชื่อยา:</label>
+                            <input list="drugs" type="text" id="drugInput" class="form-control" placeholder="พิมพ์ชื่อยาที่ต้องการตรวจสอบ..." />
+                            <datalist id="drugs">
+                                <option value="Dicloxacillin sodium" />
+                                <option value="Amoxicillin trihydrate" />
+                                <option value="Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)" />
+                                <option value="Cefixime" />
+                                <option value="Cefdinir" />
+                                <option value="Doxycycline hyclate ((Doxycycline hydrochloride)" />
+                                <option value="Azithromycin" />
+                                <option value="Clarithromycin" />
+                                <option value="Norfloxacin" />
+                                <option value="Ofloxacin" />
+                                <option value="Levofloxacin" />
+                                <option value="Ciprofloxacin" /> <!-- เพิ่ม Ciprofloxacin -->
+                                <option value="Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)" />
+                            </datalist>
+                        </div>
+                        <div class="button-box">
+                            <button class="btn btn-primary w-100" id="checkBtn">
+                                <i class="fas fa-check-circle me-2"></i> ตรวจสอบยา
+                            </button>
+                        </div>
+                        <div class="result-box" id="answerContent">
+                            ผลลัพธ์การตรวจสอบยาจะแสดงที่นี่
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab2" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-notes-medical me-2"></i> ปรับยาตาม HN
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="hnInput" class="form-label">พิมพ์ HN:</label>
+                            <input list="hns" type="text" id="hnInput" class="form-control" placeholder="พิมพ์ HN ที่ต้องการค้นหา..." />
+                            <datalist id="hns">
+                                <!-- Options จะถูกเติมโดย JavaScript -->
+                            </datalist>
+                            <div class="loading-spinner" id="hnLoadingSpinner"></div>
+                        </div>
+                        <div class="table-responsive mt-4">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th>HN</th>
+                                        <th>CrCl</th>
+                                        <th>eGFR</th>
+                                        <th>eGFR stage (G1-G5)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="displayHN"></td>
+                                        <td id="displayCrCl"></td>
+                                        <td id="displayEGFR"></td>
+                                        <td id="displayStage"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- ส่วนที่เพิ่มเข้ามาสำหรับเลือกยาและปรับยาใน Tab 2 -->
+                        <div class="mt-4">
+                            <div class="card-header">
+                                <i class="fas fa-pills me-2"></i> การปรับขนาดยาตามการทำงานของไต (จาก HN)
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="drug2_tab2" class="form-label">พิมพ์ชื่อยาที่ต้องการปรับ:</label>
+                                    <input list="drugList2_tab2" type="text" id="drug2_tab2" class="form-control" placeholder="พิมพ์ชื่อยา..." />
+                                    <datalist id="drugList2_tab2">
+                                        <!-- รายการยาจะถูกเติมด้วย JavaScript -->
+                                        <option value="Amoxicillin trihydrate" />
+                                        <option value="Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)" />
+                                        <option value="Cefixime" />
+                                        <option value="Cefdinir" />
+                                        <option value="Clarithromycin" />
+                                        <option value="Norfloxacin" />
+                                        <option value="Ofloxacin" />
+                                        <option value="Levofloxacin" />
+                                        <option value="Ciprofloxacin" /> <!-- เพิ่ม Ciprofloxacin -->
+                                        <option value="Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)" />
+                                    </datalist>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="diseaseSelect_tab2" class="form-label">เลือกโรค:</label>
+                                        <select id="diseaseSelect_tab2" class="form-select">
+                                        <option value="">-- ไม่ระบุโรค --</option>
+                                        <option value="Acute uncomplicated cystitis">Acute uncomplicated cystitis </option>
+                                        <option value="Acute uncomplicated pyelonephritis">Acute uncomplicated pyelonephritis </option>
+                                        <option value="Neisseria gonorrhoeae">Neisseria gonorrhoeae </option>
+                                        <option value="Streptococcal pharyngitis, group A">Streptococcal pharyngitis, group A </option>
+                                        <option value="Rhinosinustitis, acute bacterial">Rhinosinustitis, acute bacterial </option>
+                                        <option value="Acute Otitis media">Acute Otitis media </option>
+                                        <option value="Community-acquired pneumonia">Community-acquired pneumonia </option>
+                                        <option value="Ear, Nose, & Throat Infections">Ear, Nose, & Throat Infections </option>
+                                        <option value="Genitourinary Tract Infections">Genitourinary Tract Infections </option>
+                                        <option value="Skin & Skin Structure Infections">Skin & Skin Structure Infections </option>
+                                        <option value="Lower Respiratory Tract Infections">Lower Respiratory Tract Infections </option>
+                                        <option value="Helicobacter Pylori Infections">Helicobacter Pylori Infections</option>
+                                        <option value="Chronic Obstructive Pulmonary Disease, acute exacerbation">Chronic Obstructive Pulmonary Disease, acute exacerbation </option>
+                                        <option value="Animal/Human Bite Wounds">Animal/Human Bite Wounds </option>
+                                        <option value="Erysipelas">Erysipelas </option>
+                                        <option value="Pyelonephritis">Pyelonephritis </option>
+                                        <option value="Pneumocystis pneumonia">Pneumocystis pneumonia </option>
+                                        <option value="Urinary tract infection;uncomplicated">Urinary tract infection;uncomplicated </option>
+                                        <option value="Diarrhea, infectious:Shigellosis">Diarrhea, infectious:Shigellosis </option>
+                                        <option value="Meningitis, bacterial">Meningitis, bacterial </option>
+                                        <option value="Bone and joint infection">Bone and joint infection </option>
+                                        <option value="Hospital-acquired pneumonia">Hospital-acquired pneumonia </option>
+                                        <option value="STD; Chlamydia trachomotis">STD; Chlamydia trachomotis </option>
+                                        <option value="STD; Pelvic inflammatory disease">STD; Pelvic inflammatory disease </option>
+                                        <option value="Prostatitis">Prostatitis </option>
+                                        <option value="Gonorrhoea">Gonorrhoea </option>
+                                        <option value="Spontaneous bacterial peritonitis">Spontaneous bacterial peritonitis </option>
+                                        <option value="Urinary tract infection;complicated">Urinary tract infection;complicated </option>
+                                    </select>
+                                </div>
+                                <div class="button-box">
+                                    <button class="btn btn-primary w-100" id="adjustDoseBtn_tab2">
+                                        <i class="fas fa-prescription me-2"></i> ปรับขนาดยา
+                                    </button>
+                                </div>
+                                <div class="result-box" id="adjustment_tab2">
+                                    ผลลัพธ์การปรับขนาดยาจะแสดงที่นี่
+                                </div>
+                            </div>
+                        </div>
+                        <!-- สิ้นสุดส่วนที่เพิ่มเข้ามา -->
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab3" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-kidneys me-2"></i> การคำนวณการทำงานของไต (eGFR/CrCl)
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <label for="age" class="form-label">อายุ (ปี):</label>
+                                <input type="number" id="age" class="form-control" placeholder="อายุ">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="sex" class="form-label">เพศ:</label>
+                                <select id="sex" class="form-select">
+                                    <option value="">-- โปรดเลือก --</option>
+                                    <option value="male">ชาย</option>
+                                    <option value="female">หญิง</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="weight" class="form-label">น้ำหนัก (กก.):</label>
+                                <input type="number" id="weight" class="form-control" placeholder="น้ำหนัก">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="scr" class="form-label">Serum Creatinine (mg/dL):</label>
+                                <input type="number" id="scr" step="0.01" class="form-control" placeholder="ค่า Scr">
+                            </div>
+                        </div>
+                        <div class="button-box">
+                            <button class="btn btn-primary w-100" onclick="calculate()">
+                                <i class="fas fa-flask me-2"></i> คำนวณการทำงานของไต
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Creatinine Clearance (Cockcroft-Gault)</th>
+                                        <th>eGFR (CKD-EPI)</th>
+                                        <th>eGFR stage (G1-G5)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="crcl"></td>
+                                        <td id="egfr"></td>
+                                        <td id="stage"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-pills me-2"></i> การปรับขนาดยาตามการทำงานของไต
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="drug2" class="form-label">พิมพ์ชื่อยาที่ต้องการปรับ:</label>
+                            <input list="drugList2" type="text" id="drug2" class="form-control" placeholder="พิมพ์ชื่อยา..." />
+                            <datalist id="drugList2">
+                                <option value="Amoxicillin trihydrate" />
+                                <option value="Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)" />
+                                <option value="Cefixime" />
+                                <option value="Cefdinir" />
+                                <option value="Clarithromycin" />
+                                <option value="Norfloxacin" />
+                                <option value="Ofloxacin" />
+                                <option value="Levofloxacin" />
+                                <option value="Ciprofloxacin" /> <!-- เพิ่ม Ciprofloxacin -->
+                                <option value="Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)" />
+                            </datalist>
+                        </div>
+                        <div class="button-box">
+                            <button class="btn btn-primary w-100" onclick="adjustDose()">
+                                <i class="fas fa-prescription me-2"></i> ปรับขนาดยา
+                            </button>
+                        </div>
+                        <div class="result-box" id="adjustment">
+                            ผลลัพธ์การปรับขนาดยาจะแสดงที่นี่
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
-        <h5>Age <input type="box" name="Age" id="Age"> year</h5>
-        <h5>weigh <input type="box" name="weigh" id="weigh"> kg</h5>
-        <h5>height <input type="box" name="height" id="height"> centimeter</h5>
-        <h5>Scr <input type="box" name="Scr" id="Scr"> mg/dl</h5>
+
+    <div class="popup" id="popup"></div>
+
+    <div class="overlay" id="referenceOverlay">
+        <div class="reference-page">
+            <span class="close-btn" id="closeReference">&times;</span>
+            <h2><i class="fas fa-book-open me-2"></i> แหล่งอ้างอิง</h2>
+            <div id="referenceContent">
+                <ul>
+                    <li>1. กำลังรอเติมข้อมูล</li>
+                    <li>2. กำลังรอเติมข้อมูล</li>
+                </ul>
+                <p>
+                    เนื้อหาการปรับยาในหน้านี้เป็นข้อมูลเบื้องต้น โปรดปรึกษาเภสัชกรหรือแพทย์ผู้เชี่ยวชาญก่อนการตัดสินใจทางคลินิก
+                </p>
+            </div>
+        </div>
     </div>
-    <div>
-        <button id="button" type="button">submit</button>
-    </div>
-    <nav>
-        <div id="outputCrcl"></div> 
-	<div id="outputBmi"></div>
-	<div id="outDetect"></div> 
-    </nav>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        // --- Global Variables and Constants ---
+        // Client-side Login Credentials (NOT secure for real-world use)
+        // For multiple users, use an array of objects
+        const VALID_USERS = [
+            { username: "wing", password: "kittatat" },
+            { username: "Fluke", password: "taewit" },
+            { username: "taopheen", password: "napattarakorn" },
+            { username: "tangton", password: "potchara" },
+            { username: "moss", password: "yodsanan" },
+            { username: "nungning", password: "chanapa" },
+            { username: "fang", password: "natthida" },
+            { username: "Admin", password: "pharmsis99" }
+        ];
+
+        // Google Sheet URL published as CSV
+        const PUBLISHED_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRGrnFh7I8dduJE0CssASRGuZlHnwRDRNDWIq32X7gO9ZNsC0BdZxVtZqOPEQ65JYsw3eHLgk5jLEvY/pub?gid=403921903&single=true&output=csv";
+        let sheetData = []; // To store fetched Google Sheet data
+
+        // --- DOM Elements ---
+        const loginPage = document.getElementById('loginPage');
+        const mainApp = document.getElementById('mainApp');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordInput = document.getElementById('passwordInput');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const tabs = document.querySelectorAll('.tab');
+        const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        const contents = document.querySelectorAll('.tab-content');
+
+        const drugInput = document.getElementById("drugInput");
+        const answerContent = document.getElementById("answerContent");
+        const popup = document.getElementById("popup");
+        const checkBtn = document.getElementById("checkBtn");
+        
+        // Tab 2 Elements
+        const hnInput = document.getElementById('hnInput');
+        const hnDatalist = document.getElementById('hns');
+        const hnLoadingSpinner = document.getElementById('hnLoadingSpinner');
+        const displayHN = document.getElementById('displayHN');
+        const displayCrCl = document.getElementById('displayCrCl');
+        const displayEGFR = document.getElementById('displayEGFR');
+        const displayStage = document.getElementById('displayStage');
+        const drug2_tab2 = document.getElementById('drug2_tab2'); // New drug input for Tab 2
+        const drugList2_tab2 = document.getElementById('drugList2_tab2'); // Datalist for Tab 2
+        const adjustDoseBtn_tab2 = document.getElementById('adjustDoseBtn_tab2'); // New adjust button for Tab 2
+        const diseaseSelect_tab2 = document.getElementById('diseaseSelect_tab2');
+        const adjustment_tab2 = document.getElementById('adjustment_tab2'); // Result box for Tab 2
+
+        // Tab 3 Elements
+        const adjustmentOutput = document.getElementById('adjustment'); // Original adjustment output for Tab 3
+        const referenceLink = document.getElementById('referenceLink');
+        const referenceOverlay = document.getElementById('referenceOverlay');
+        const closeReferenceBtn = document.getElementById('closeReference');
+
+        let currentEGFR = 0; // Global for Tab 3 calculation
+        let currentCrCl = 0; // Global for Tab 3 calculation
+        let hnEGFR = 0; // New global for HN-based EGFR (from Tab 2)
+        let hnCrCl = 0; // New global for HN-based CrCl (from Tab 2)
+
+        // --- Drug Data ---
+        const drugData = { // For Tab 1 drug check
+            "Dicloxacillin sodium": "<u>ไม่ต้องปรับขนาดยาตามการทำงานของไต",
+            "Amoxicillin trihydrate": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Cefixime": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Cefdinir": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Doxycycline hyclate ((Doxycycline hydrochloride)": "<u>ไม่</u>ต้องปรับขนาดยาตามการทำงานของไต",
+            "Azithromycin": "<u>ไม่</u>ต้องปรับขนาดยาตามการทำงานของไต",
+            "Clarithromycin": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Norfloxacin": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Ofloxacin": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Levofloxacin": "ต้องปรับขนาดยาตามการทำงานของไต",
+            "Ciprofloxacin": "ต้องปรับขนาดยาตามการทำงานของไต", 
+            "Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)": "ต้องปรับขนาดยาตามการทำงานของไต",
+        };
+
+        const drugAdjustData = { // For Tab 3 & New Tab 2 drug adjustment
+            "Amoxicillin trihydrate": {
+                "Ear, Nose, & Throat Infections" : {
+                ">= 30":    "No dosage adjustment for eGFR >=30<br>"+
+                            "500 mg PO q12hr or 250 mg PO q8hr for 10-14 days<br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr for 10-14 days",
+                "10-30":    "<U>dosage adjustment for eGFR 10-30 </U><br>"+
+                            "250 mg PO q8hr for 10-14 days -> <U>250 mg PO q12hr for 10-14 days</U><br>"+
+                            "875 mg PO q12hr for 10-14 days -> <U>500 mg q 12 hr for 10-14 days </U><br>"+
+                            "500 mg PO q8hr for 10-14 days -> <U>500 mg PO q12hr for 10-14 days </U><br>",
+                "< 10":     "<U>dosage adjustment for eGFR <10 </U><br>"+
+                            "250 mg PO q8hr for 10-14 days -> <U>250 mg PO q12-24hr</U><br>"+
+                            "875 mg PO q12hr for 10-14 days -> <U>500 mg q 12-24hr for 10-14 days </U><br>"+
+                            "500 mg PO q8hr for 10-14 days -> <U>500 mg PO q12-24hr for 10-14 days </U><br>",
+                },
+                "Genitourinary Tract Infections" : {
+                ">= 30":    "No dosage adjustment for eGFR >=30<br>"+
+                            "500 mg PO q12hr or 250 mg PO q8hr <br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr ",
+
+                "10-30":    "<U>dosage adjustment for eGFR 10-30 </U><br>"+
+                            "250 mg PO q8hr -> <U>250 mg PO q12hr</U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12 hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for eGFR <10 </U><br>"+
+                            "250 mg PO q8hr -> <U>250 mg PO q12-24hr </U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12-24hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12-24hr </U><br>",
+                },
+                "Skin & Skin Structure Infections" : {
+                ">= 30":    "No dosage adjustment for eGFR >=30<br>"+
+                            "500 mg PO q12hr or 250 mg PO q8hr <br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr ",
+
+                "10-30":    "<U>dosage adjustment for eGFR 10-30 </U><br>"+
+                            "250 mg PO q8hr -> <U>250 mg PO q12hr</U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12 hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for eGFR <10 </U><br>"+
+                            "250 mg PO q8hr -> <U>250 mg PO q12-24hr </U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12-24hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12-24hr </U><br>",
+                },
+                "Lower Respiratory Tract Infections" : {
+                ">= 30":    "No dosage adjustment for eGFR >=30<br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr for 10-14 days",
+
+                "10-30":    "<U>dosage adjustment for eGFR 10-30 </U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12 hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for eGFR <10 </U><br>"+
+                            "875 mg PO q12hr -> <U>500 mg q 12-24hr </U><br>"+
+                            "500 mg PO q8hr -> <U>500 mg PO q12-24hr </U><br>",
+                },
+                "Helicobacter Pylori Infections" : {
+                ">= 30":    "No dosage adjustment for eGFR >=30<br>"+
+                            "1 g PO q12hr for 14 days",
+
+                "10-30":    "<U>dosage adjustment for eGFR 10-30 </U><br>"+
+                            "1 g PO q12hr -> <U>500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for eGFR <10 </U><br>"+
+                            "1 g PO q12hr -> <U>500 mg q 12-24 hr </U><br>",
+                },
+            },
+            "Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)": {
+                "Lower Respiratory Tract Infection" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "500/125 mg PO q12hr or 250/125 mg PO q8hr for 10 days<br>"+
+                            "875/125 mg PO q12hr or 500/125 mg PO q8hr for 7-10 days",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+                "Chronic Obstructive Pulmonary Disease, acute exacerbation" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "500 mg PO q8hr<br>",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+                "Rhinosinustitis, acute bacterial" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "2000 mg (2 extended-release tablets) PO q12hr for 10 days",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+                "Animal/Human Bite Wounds" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr for 3-5 days",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+                "Erysipelas" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr for 7-10 days",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+                "Pyelonephritis" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "875 mg PO q12hr or 500 mg PO q8hr",
+
+                "10-30":    "<U>dosage adjustment for CrCl 10-30 </U><br>"+
+                            "<U>250-500 mg q 12 hr </U><br>",
+                
+                "< 10":     "<U>dosage adjustment for CrCl <10 </U><br>"+
+                            "<U>250-500 mg q 12-24 hr </U><br>",
+                },
+            },
+            "Cefixime": {
+                "Acute uncomplicated cystitis" : {
+                ">= 60":    "No dosage adjustment for CrCl >=60<br>"+
+                            "400 mg once daily for 7 days",
+
+                "20-60":    "<U>dosage adjustment for CrCl 20-59 </U><br>"+
+                            "<U>300 mg once daily </U><br>",
+                
+                "< 20":     "<U>dosage adjustment for CrCl <=20 </U><br>"+
+                            "<U>200 mg once daily </U><br>",
+                },
+                "Acute uncomplicated pyelonephritis" : {
+                ">= 60":    "No dosage adjustment for CrCl >=60<br>"+
+                            "400 mg once daily for 10-14 days",
+
+                "20-60":    "<U>dosage adjustment for CrCl 20-59 </U><br>"+
+                            "<U>300 mg once daily </U><br>",
+                
+                "< 20":     "<U>dosage adjustment for CrCl <=20 </U><br>"+
+                            "<U>200 mg once daily </U><br>",
+                },
+                "Neisseria gonorrhoeae" : {
+                ">= 60":    "No dosage adjustment for CrCl >=60<br>"+
+                            "800 mg single dose",
+
+                "20-60":    "<U>dosage adjustment for CrCl 20-59 </U><br>"+
+                            "<U>300 mg once daily </U><br>",
+                
+                "< 20":     "<U>dosage adjustment for CrCl <=20 </U><br>"+
+                            "<U>200 mg once daily </U><br>",
+                },
+                "Streptococcal pharyngitis, group A" : {
+                ">= 60":    "No dosage adjustment for CrCl >=60<br>"+
+                            "400 mg once daily for 10 days",
+
+                "20-60":    "<U>dosage adjustment for CrCl 20-59 </U><br>"+
+                            "<U>300 mg once daily </U><br>",
+                
+                "< 20":     "<U>dosage adjustment for CrCl <=20 </U><br>"+
+                            "<U>200 mg once daily </U><br>",
+                },
+                "Rhinosinustitis, acute bacterial" : {
+                ">= 60":    "No dosage adjustment for CrCl >=60<br>"+
+                            "400 mg once daily for 5-7 days",
+
+                "20-60":    "<U>dosage adjustment for CrCl 20-59 </U><br>"+
+                            "<U>300 mg once daily </U><br>",
+                
+                "< 20":     "<U>dosage adjustment for CrCl <=20 </U><br>"+
+                            "<U>200 mg once daily </U><br>",
+                },
+            },
+            "Cefdinir": {
+                "Acute uncomplicated cystitis" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "300 mg twice daily for 5-7 days",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>300 mg once daily (Adult) </U><br>"+
+                            "<U>7 mg/kg/day (Children)</U>",
+                },
+                "Acute Otitis media" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "300 mg twice daily or 600 mg once daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>300 mg once daily (Adult) </U><br>"+
+                            "<U>7 mg/kg/day (Children)</U>",
+                },
+                "Streptococcal pharyngitis, group A" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "300 mg twice daily or 600 mg once daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>300 mg once daily (Adult) </U><br>"+
+                            "<U>7 mg/kg/day (Children)</U>",
+                },
+                "Rhinosinustitis, acute bacterial" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "300 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>300 mg once daily (Adult) </U><br>"+
+                            "<U>7 mg/kg/day (Children)</U>",
+                },
+                "Community-acquired pneumonia " : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "300 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>300 mg once daily (Adult) </U><br>"+
+                            "<U>7 mg/kg/day (Children)</U>",
+                },
+            },
+            "Clarithromycin": {
+                "Helicobacter Pylori Infections " : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "500 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>250 mg twice daily or 500 mg once daily</U><br>",
+                },
+                "Community-acquired pneumonia " : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "500 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>250 mg twice daily or 500 mg once daily</U><br>",
+                },
+                "Skin & Skin Structure Infections" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "250 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>250 mg once daily </U><br>",
+                },
+                "Streptococcal pharyngitis, group A" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "250 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>250 mg once daily </U><br>",
+                },
+                "Rhinosinusitis, acute bacterial" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "500 mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>250 mg twice daily or 500 mg once daily</U><br>",
+                },
+            },
+            "Norfloxacin": {
+                "Gonorrhoea" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "800mg single dose ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>800mg single dose</U><br>",
+                },
+                "Spontaneous bacterial peritonitis" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "400mg once to twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>400mg once every 24 hours</U><br>",
+                },
+                "Urinary tract infection;uncomplicated" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "400mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>400mg once every 24 hours</U><br>",
+                },
+                "Urinary tract infection;complicated" : {
+                ">= 30":    "No dosage adjustment for CrCl >=30<br>"+
+                            "400mg twice daily ",
+                
+                "< 30":     "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                            "<U>400mg once every 24 hours</U><br>",
+                },
+            },
+            "Ciprofloxacin": { 
+                "Rhinosinustitis, acute bacterial" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500 mg q 12 hr ",
+
+                "30-50": "<U>dosage adjustment for CrCl 29-50</U><br>"+
+                         " <U>250-500 mg q 12 hr</U> ",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         "<U>250-500 mg q 18 hr</U> "
+                },
+                "Lower Respiratory Tract Infections" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " : 500-750 mg q 12 hr ",
+
+                "30-50": "<U>dosage adjustment for CrCl 29-50</U><br>"+
+                         " <U>250-500 mg q 12 hr </U>",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         "  <U>250-500 mg q 18 hr</U> "
+                },
+                "Urinary tract infection;uncomplicated" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 250-500 mg q 12 hr ",
+
+                "30-50": "</U>dosage adjustment for CrCl 29-50</U><br>"+
+                         " <U>250-500 mg q 12 hr</U>",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         "  250-500 mg q 18 hr "
+                },
+                "Urinary tract infection;complicated" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         "  500 mg q 12 hr ",
+
+                "30-50": "<U>dosage adjustment for CrCl 29-50</U><br>"+
+                         "<U>250-500 mg q 12 hr<U> ",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         "<U>250-500 mg q 18 hr</U> "
+                },
+                "Skin & Skin Structure Infections" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500-750 mg q 12 hr ",
+
+                "30-50": "<U>dosage adjustment for CrCl 29-50</U><br>"+
+                         "<U>250-500 mg q 12 hr </U>",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         " <U>250-500 mg q 18 hr</U> "
+                },
+                 "Bone and joint infection" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500-750 mg q 12 hr ",
+
+                "30-50": "<U>dosage adjustment for CrCl 29-50</U><br>"+
+                         "<U>250-500 mg q 12 hr</U>",
+
+                "< 30": "<U>dosage adjustment for CrCl < 30 </U><br>"+
+                         "<U>250-500 mg q 18 hr</U>"
+                },
+            },
+            "Ofloxacin": {
+                "Community-acquired pneumonia" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 400mg twice daily ",
+
+                "20-50": "<U>dosage adjustment for CrCl 20-49</U><br>"+
+                         " <U>400mg once daily</U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>200mg once daily hr</U> "
+                },
+                "Skin & Skin Structure Infections" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 400mg twice daily ",
+
+                "20-50": "<U>dosage adjustment for CrCl 20-49</U><br>"+
+                         " <U>400mg once daily</U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         "<U>200mg once daily hr</U>"
+                },
+                "STD; Chlamydia trachomotis" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 300mg twice daily ",
+
+                "20-50": "<U>No dosage adjustment for CrCl 20-49<br><U>"+
+                         " <U>300mg once daily<U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>150mg once daily hr </U>"
+                },
+                "STD; Pelvic inflammatory disease" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 400mg twice daily ",
+
+                "20-50": "<U>dosage adjustment for CrCl 20-49</U><br>"+
+                         " <U>400mg once daily</U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>200mg once daily hr</U> "
+                },
+                "Prostatitis" : {
+                ">= 50": "No dosage adjustment for CrCl >=30<br>"+
+                         " 300mg twice daily ",
+
+                "20-50": "<U>No dosage adjustment for CrCl 20-49<br><U>"+
+                         " <U>300mg once daily<U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " 150mg once daily hr "
+                },
+            },
+            "Levofloxacin": {
+                "Rhinosinustitis, acute bacterial" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500mg once daily ",
+
+                "20-50": "<U>No dosage adjustment for CrCl 20-49 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 24 hr </U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 48 hr </U>"
+                },
+                "Chronic Obstructive Pulmonary Disease, acute exacerbation" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500mg once daily ",
+
+                "20-50": "<U>No dosage adjustment for CrCl 20-49 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 24 hr </U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 48 hr </U>"
+                },
+                "Skin & Skin Structure Infections" : {
+                ">= 50": "No dosage adjustment for CrCl >=50<br>"+
+                         " 500mg once daily ",
+
+                "20-50": "<U>No dosage adjustment for CrCl 20-49 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 24 hr </U> ",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Start 500 mg then 250 mg q 48 hr </U>"
+                },
+                "Urinary tract infection;uncomplicated" : {
+               ">= 50": "No dosage adjustment for CrCl >=30<br>"+
+                         " 250mg once daily ",
+
+                "20-50": "No dosage adjustment for CrCl >=30<br>"+
+                         " 250mg once daily",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         "<U>250 mg q 48 hr</U>"
+                },
+                "Urinary tract infection;complicated" : {
+                ">= 50": "No dosage adjustment for CrCl >=30<br>"+
+                         " 250mg once daily ",
+
+                "20-50": "No dosage adjustment for CrCl >=30<br>"+
+                         "250mg once daily",
+
+                "< 20": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>250 mg q 48 hr</U> "
+                },
+            },
+            "Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)": {
+                "Pneumocystis pneumonia" : {
+                "> 30": "No dosage adjustment for CrCl >30<br>"+
+                         " 15 to 20 mg/kg/day in 3 divided doses or <br>"+
+                         "two double-strength tablets 3 times daily ",
+
+                "15-30": "<U>dosage adjustment for CrCl >=30 </U><br>"+
+                         "<U>Reduce dose to ~50% of usual dose.</U>",
+
+                "< 15": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Reduce dose to ~25 to 50% of usual dose.</U><br>"+
+                            " <U>Use with caution and appropriate monitoring</U> "
+                },
+                "Urinary tract infection;uncomplicated" : {
+                "> 30": "No dosage adjustment for CrCl >30<br>"+
+                         " 1 double-strength tablet twice daily ",
+
+                "15-30": "<U>dosage adjustment for CrCl >=30 </U><br>"+
+                         "<U>Reduce dose to ~50% of usual dose.</U>",
+
+                "< 15": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Reduce dose to ~25 to 50% of usual dose.</U><br>"+
+                            " <U>Use with caution and appropriate monitoring</U> "
+                },
+                "Urinary tract infection;complicated" : {
+                "> 30": "No dosage adjustment for CrCl >30<br>"+
+                         " 1 double-strength tablet twice daily ",
+
+                "15-30": "<U>dosage adjustment for CrCl >=30 </U><br>"+
+                         "<U>Reduce dose to ~50% of usual dose.</U>",
+
+                "< 15": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Reduce dose to ~25 to 50% of usual dose.</U><br>"+
+                            " <U>Use with caution and appropriate monitoring</U> "
+                },
+                "Diarrhea, infectious:Shigellosis" : {
+                "> 30": "No dosage adjustment for CrCl >30<br>"+
+                         " 1 double-strength tablet every 12 hours ",
+
+                "15-30": "<U>dosage adjustment for CrCl >=30 </U><br>"+
+                         "<U>Reduce dose to ~50% of usual dose.</U>",
+
+                "< 15": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Reduce dose to ~25 to 50% of usual dose.</U><br>"+
+                            " <U>Use with caution and appropriate monitoring</U> "
+                },
+                "Chronic Obstructive Pulmonary Disease, acute exacerbation" : {
+                "> 30": "No dosage adjustment for CrCl >30<br>"+
+                         " 1 double-strength tablet every 12 hours ",
+
+                "15-30": "<U>dosage adjustment for CrCl >=30 </U><br>"+
+                         "<U>Reduce dose to ~50% of usual dose.</U>",
+
+                "< 15": "<U>dosage adjustment for CrCl < 20 </U><br>"+
+                         " <U>Reduce dose to ~25 to 50% of usual dose.</U><br>"+
+                            " <U>Use with caution and appropriate monitoring</U> "
+                },
+            }
+        
+        };
+
+        // --- Functions ---
+
+        // Function to show the main application and hide the login page
+        function showApp() {
+            loginPage.style.display = 'none';
+            mainApp.style.display = 'block';
+        }
+
+        // Function to show the login page and hide the main application
+        function showLogin() {
+            loginPage.style.display = 'flex';
+            mainApp.style.display = 'none';
+        }
+
+        // Handles user login
+        function loginUser() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Check if any user in VALID_USERS array matches the entered credentials
+            const userFound = VALID_USERS.some(user => user.username === username && user.password === password);
+
+            if (userFound) {
+                showApp();
+                loginError.style.display = 'none';
+                // Automatically load HN data upon successful login
+                fetchSheetData();
+            } else {
+                loginError.style.display = 'block';
+            }
+        }
+
+        // Tab switching logic
+        function activateTab(targetTabId) {
+            // Deactivate all tabs and content
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+            navLinks.forEach(nl => nl.classList.remove('active'));
+
+            // Activate the selected tab and content
+            const selectedTab = document.querySelector(`.tab[data-tab="${targetTabId}"]`);
+            const selectedNavLink = document.querySelector(`.nav-link[data-tab-target="${targetTabId}"]`);
+            const selectedContent = document.getElementById(targetTabId);
+
+            if (selectedTab) selectedTab.classList.add('active');
+            if (selectedNavLink) selectedNavLink.classList.add('active');
+            if (selectedContent) selectedContent.classList.add('active');
+        }
+
+        // Tab 1: Drug check script
+        function checkDrug() {
+            const drug = drugInput.value.trim();
+            answerContent.classList.remove('error', 'positive', 'negative', 'info');
+            popup.classList.remove('positive', 'negative', 'info');
+
+            if (drugData.hasOwnProperty(drug)) {
+                let resultText = drugData[drug];
+                let displayResult = `${drug} : ${resultText}`;
+
+                // Check if drug needs kidney adjustment to display kidney icon
+                if (resultText.includes("ต้องปรับขนาดยา")) { 
+                    displayResult = `<i class="fas fa-kidneys"></i> ${drug} : ${resultText}`;
+                }
+                
+                answerContent.innerHTML = displayResult;
+                popup.innerHTML = displayResult;
+
+                answerContent.style.color = '#333'; 
+                popup.style.color = '#333';
+                answerContent.style.borderColor = '#e65100';
+                popup.style.borderColor = '#d84315';
+
+                popup.style.display = "block";
+                setTimeout(() => {
+                    popup.style.display = "none";
+                }, 5000);
+            } else {
+                answerContent.textContent = "ไม่พบข้อมูลยา";
+                answerContent.classList.add('error');
+                popup.textContent = "ไม่พบข้อมูลยา";
+                popup.classList.add('info');
+                popup.style.display = "block";
+                setTimeout(() => {
+                    popup.style.display = "none";
+                }, 5000);
+            }
+        }
+
+        // Tab 2: Fetch and display HN data (updated to use published Google Sheet CSV)
+        async function fetchSheetData() {
+            hnLoadingSpinner.style.display = 'block'; // Show loading spinner
+            hnInput.value = ''; // Clear input field
+            hnDatalist.innerHTML = ''; // Clear datalist options
+            hnInput.disabled = true; // Disable input during loading
+
+            // Check if PUBLISHED_CSV_URL is set
+            if (!PUBLISHED_CSV_URL) {
+                console.error("Published CSV URL is not set. Please check the code.");
+                hnInput.placeholder = '-- กรุณาตั้งค่า Published CSV URL --';
+                displayHN.textContent = "กรุณาตั้งค่า Published CSV URL";
+                displayCrCl.textContent = "-";
+                displayEGFR.textContent = "-";
+                displayStage.textContent = "-";
+                hnLoadingSpinner.style.display = 'none';
+                hnInput.disabled = false;
+                return;
+            }
+
+            try {
+                // Fetch the published Google Sheet CSV URL
+                const response = await fetch(PUBLISHED_CSV_URL);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                }
+                const csvText = await response.text();
+                
+                // Parse CSV data
+                sheetData = parseCSV(csvText); 
+                
+                populateHNDatalist(sheetData); // Update to use populateHNDatalist
+            } catch (error) {
+                console.error("Error fetching data from published CSV:", error);
+                hnInput.placeholder = '-- ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบ Console) --';
+                displayHN.textContent = "เกิดข้อผิดพลาดในการโหลดข้อมูล";
+                displayCrCl.textContent = "-";
+                displayEGFR.textContent = "-";
+                displayStage.textContent = "-";
+            } finally {
+                hnLoadingSpinner.style.display = 'none'; // Hide loading spinner
+                hnInput.disabled = false; // Enable input
+            }
+        }
+
+        // Function to parse CSV data
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const data = [];
+            // Assuming the first row is headers, skip it
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (line) { // Ensure row is not empty
+                    // Split data by comma
+                    // May need adjustment if commas are within cell data
+                    const row = line.split(',');
+                    data.push(row);
+                }
+            }
+            return data;
+        }
+
+        // Populate HN datalist
+        function populateHNDatalist(data) {
+            hnDatalist.innerHTML = ''; // Clear existing options
+            const uniqueHNs = new Set();
+            data.forEach(row => {
+                const hn = row[0]; // HN is in column A (index 0)
+                if (hn && !uniqueHNs.has(hn)) {
+                    uniqueHNs.add(hn);
+                    const option = document.createElement('option');
+                    option.value = hn;
+                    hnDatalist.appendChild(option);
+                }
+            });
+            hnInput.placeholder = 'พิมพ์ HN ที่ต้องการค้นหา...'; // Reset placeholder
+        }
+
+        // Display selected HN data (updated to use hnInput)
+        function displayHNData() {
+            const selectedHN = hnInput.value.trim(); // Use hnInput.value
+            if (!selectedHN) {
+                displayHN.textContent = "";
+                displayCrCl.textContent = "";
+                displayEGFR.textContent = "";
+                displayStage.textContent = "";
+                hnCrCl = 0; // Reset global HN CrCl
+                hnEGFR = 0; // Reset global HN EGFR
+                adjustment_tab2.innerHTML = "ผลลัพธ์การปรับขนาดยาจะแสดงที่นี่"; // Reset adjustment for Tab 2
+                adjustment_tab2.classList.remove('positive', 'negative', 'error', 'warning');
+                return;
+            }
+
+            const foundRow = sheetData.find(row => row[0] === selectedHN); // Find row by HN (column A)
+
+            if (foundRow) {
+                displayHN.textContent = foundRow[0] || '-'; // HN (column A)
+                hnCrCl = foundRow[9] ? parseFloat(foundRow[9]) : 0; // CrCl (column J)
+                hnEGFR = foundRow[10] ? parseFloat(foundRow[10]) : 0; // eGFR (column K)
+
+                displayCrCl.textContent = (hnCrCl ? hnCrCl.toFixed(2) : '-') + (hnCrCl ? ' mL/min' : '');
+                displayEGFR.textContent = (hnEGFR ? hnEGFR.toFixed(2) : '-') + (hnEGFR ? ' mL/min/1.73m²' : '');
+                displayStage.textContent = foundRow[11] || '-'; // eGFR stage (column L)
+            } else {
+                displayHN.textContent = "ไม่พบข้อมูล";
+                displayCrCl.textContent = "-";
+                displayEGFR.textContent = "-";
+                displayStage.textContent = "-";
+                hnCrCl = 0; // Reset global HN CrCl
+                hnEGFR = 0; // Reset global HN EGFR
+                adjustment_tab2.innerHTML = "ผลลัพธ์การปรับขนาดยาจะแสดงที่นี่"; // Reset adjustment for Tab 2
+                adjustment_tab2.classList.remove('positive', 'negative', 'error', 'warning');
+            }
+        }
+
+        // Tab 2: New drug adjustment function based on HN data
     
-    <script src="./cal.js"></script>
+    function updateDiseaseOptions() {
+  const selectedDrug = drug2_tab2.value;
+  const diseaseData = drugAdjustData[selectedDrug];
+
+  // Clear existing options, but keep the default "no disease specified" option
+  while (diseaseSelect_tab2.options.length > 1) {
+    diseaseSelect_tab2.remove(1);
+  }
+
+  // Add new options if drug data exists
+  if (diseaseData) {
+    const diseases = Object.keys(diseaseData);
+    diseases.forEach(disease => {
+      const option = document.createElement('option');
+      option.value = disease;
+      option.textContent = disease;
+      diseaseSelect_tab2.appendChild(option);
+    });
+  }
+}
+
+        function adjustDose_tab2() {
+    const selectedDrug = drug2_tab2.value.trim();
+    const diseaseSelect_tab2 = document.getElementById('diseaseSelect_tab2');
+    const selectedDisease = diseaseSelect_tab2.value.trim();
+
+    if (!selectedDrug) {
+        adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกยาที่ต้องการปรับ</div>';
+        return;
+    }
+
+    if (!hnCrCl) {
+        adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาตรวจสอบ HN และ CrCl เพื่อคำนวณค่าไตก่อน</div>';
+        return;
+    }
+
+    const drug = drugAdjustData[selectedDrug];
+    if (!drug) {
+        adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> ไม่พบข้อมูลการปรับยาสำหรับยาที่เลือก</div>';
+        return;
+    }
+
+    let result = '';
+
+    if (selectedDrug === "Amoxicillin trihydrate") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Amoxicillin trihydrate</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnEGFR >= 30) {
+                result = adjustmentData[">= 30"];
+            } else if (hnEGFR >= 10 && hnEGFR < 30) {
+                result = adjustmentData["10-30"];
+            } else if (hnEGFR < 10) {
+                result = adjustmentData["< 10"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้";
+            }
+        }
+    } else if (selectedDrug === "Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Co – amoxiclav</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 30) {
+                result = adjustmentData[">= 30"];
+            } else if (hnCrCl >= 10 && hnCrCl < 30) {
+                result = adjustmentData["10-30"];
+            } else if (hnCrCl < 10) {
+                result = adjustmentData["< 10"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้";
+            }
+        }
+    } else if (selectedDrug === "Cefixime") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Cefixime</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 60) {
+                result = adjustmentData[">= 60"];
+            } else if (hnCrCl >= 20 && hnCrCl < 60) {
+                result = adjustmentData["20-60"];
+            } else if (hnCrCl < 20) {
+                result = adjustmentData["< 20"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้";
+            }
+        }
+    } else if (selectedDrug === "Cefdinir") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Cefdinir</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 30) {
+                result = adjustmentData[">= 30"];
+            }  else if (hnCrCl < 30) {
+                result = adjustmentData["< 30"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้";
+            }
+        }
+    } else if (selectedDrug === "Clarithromycin") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Clarithromycin</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 30) {
+                result = adjustmentData[">= 30"];
+            }  else if (hnCrCl < 30) {
+                result = adjustmentData["< 30"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    } else if (selectedDrug === "Norfloxacin") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Norfloxacin</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnEGFR >= 30) {
+                result = adjustmentData[">= 30"];
+            }  else if (hnEGFR < 30) {
+                result = adjustmentData["< 30"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    } else if (selectedDrug === "Ciprofloxacin") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Ciprofloxacin</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 50) {
+                result = adjustmentData[">= 50"];
+            } else if (hnCrCl >= 30 && hnCrCl < 50) {
+                result = adjustmentData["30-50"];
+            } else if (hnCrCl < 30) {
+                result = adjustmentData["< 30"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    } else if (selectedDrug === "Ofloxacin") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Ofloxacin</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 50) {
+                result = adjustmentData[">= 50"];
+            } else if (hnCrCl > 20 && hnCrCl < 50) {
+                result = adjustmentData["20-50"];
+            } else if (hnCrCl <= 20) {
+                result = adjustmentData["<= 20"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    }else if (selectedDrug === "Levofloxacin") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Levofloxacin</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl >= 50) {
+                result = adjustmentData[">= 50"];
+            } else if (hnCrCl >= 20 && hnCrCl < 50) {
+                result = adjustmentData["20-50"];
+            } else if (hnCrCl < 20) {
+                result = adjustmentData["< 20"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    }else if (selectedDrug === "Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)") {
+        if (!selectedDisease) {
+            adjustment_tab2.innerHTML = '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i> กรุณาเลือกโรคสำหรับยา Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)</div>';
+            return;
+        }
+
+        const adjustmentData = drug[selectedDisease];
+        if (adjustmentData) {
+            if (hnCrCl > 30) {
+                result = adjustmentData["> 30"];
+            } else if (hnCrCl > 15 && hnCrCl <= 30) {
+                result = adjustmentData["15-30"];
+            } else if (hnCrCl <= 15) {
+                result = adjustmentData["<= 15"];
+            } else {
+                result = "ไม่พบข้อมูลการปรับยาสำหรับค่า CrCl นี้"; 
+            }
+        }
+    }
+
+    if (result) {
+        adjustment_tab2.innerHTML = `<div class="alert alert-success mt-4"><b>ผลลัพธ์การปรับยา:</b><br>${result}</div>`;
+    } else {
+        adjustment_tab2.innerHTML = '<div class="alert alert-danger mt-4"><b>ไม่พบข้อมูลการปรับยาสำหรับตัวเลือกนี้ โปรดตรวจสอบอีกครั้ง</b></div>';
+    }
+}
+        
+
+
+        // Tab 3: Kidney function calculation script
+        function calculate() {
+            const age = parseFloat(document.getElementById('age').value);
+            const sex = document.getElementById('sex').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const scr = parseFloat(document.getElementById('scr').value);
+            // Clear previous results and highlight errors if data is invalid
+            document.getElementById('crcl').innerText = "";
+            document.getElementById('egfr').innerText = "";
+            document.getElementById('stage').innerText = "";
+            currentEGFR = 0;
+            currentCrCl = 0;
+
+            adjustmentOutput.innerHTML = "ผลลัพธ์การปรับขนาดยาจะแสดงที่นี่";
+            adjustmentOutput.classList.remove('positive', 'negative', 'error', 'warning');
+            if (!age || !sex || !weight || !scr || isNaN(age) || isNaN(weight) || isNaN(scr) || age <= 0 || weight <= 0 || scr <= 0) {
+                document.getElementById('crcl').innerText = "กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง";
+                document.getElementById('egfr').innerText = "-";
+                document.getElementById('stage').innerText = "-";
+                // Set cell background color to light red to indicate error
+                document.getElementById('crcl').parentNode.style.backgroundColor = '#ffebee';
+                document.getElementById('egfr').parentNode.style.backgroundColor = '#ffebee';
+                document.getElementById('stage').parentNode.style.backgroundColor = '#ffebee';
+                return;
+            } else {
+                // Reset cell background color to default if data is valid
+                document.getElementById('crcl').parentNode.style.backgroundColor = '';
+                document.getElementById('egfr').parentNode.style.backgroundColor = '';
+                document.getElementById('stage').parentNode.style.backgroundColor = '';
+            }
+
+
+            // Cockcroft-Gault formula
+            let crcl = ((140 - age) * weight) / (72 * scr);
+            if (sex === "female") crcl *= 0.85;
+            currentCrCl = crcl;
+            document.getElementById('crcl').innerText = crcl.toFixed(2) + " mL/min";
+            // CKD-EPI 2009 formula
+            const k = sex === "male" ? 0.9 : 0.7;
+            const a = sex === "male" ? -0.302 : -0.241;
+            const ratio = scr / k;
+            let egfr;
+            if (ratio < 1) {
+                egfr = 142 * Math.pow(ratio, a) * Math.pow(0.9938, age);
+            } else {
+                egfr = 142 * Math.pow(1, a) * Math.pow(ratio, -1.2) * Math.pow(0.9938, age);
+            }
+            if (sex === "female") egfr *= 1.012;
+            currentEGFR = egfr;
+            document.getElementById('egfr').innerText = egfr.toFixed(2) + " mL/min/1.73m²";
+
+            // GFR Stage classification
+            let stage = "";
+            let stageClass = "";
+            if (egfr >= 90) {
+                stage = "G1 (ปกติ หรือมีภาวะเสี่ยงเล็กน้อย)";
+                stageClass = "text-success";
+            } else if (egfr >= 60) {
+                stage = "G2 (ไตเริ่มเสื่อมระยะที่ 2)";
+                stageClass = "text-warning";
+            } else if (egfr >= 45) {
+                stage = "G3a (ไตเสื่อมระยะที่ 3a)";
+                stageClass = "text-danger";
+            } else if (egfr >= 30) {
+                stage = "G3b (ไตเสื่อมระยะที่ 3b)";
+                stageClass = "text-danger";
+            } else if (egfr >= 15) {
+                stage = "G4 (ไตเสื่อมระยะที่ 4)";
+                stageClass = "text-danger";
+            } else {
+                stage = "G5 (ไตวายระยะสุดท้าย)";
+                stageClass = "text-danger";
+            }
+            document.getElementById('stage').innerText = stage;
+            document.getElementById('stage').className = stageClass;
+        }
+
+        function adjustDose() { // This function is for Tab 3
+            adjustmentOutput.classList.remove('positive', 'negative', 'error', 'warning');
+            
+            console.log("currentEGFR =", currentEGFR);
+            console.log("currentCrCl =", currentCrCl);
+
+            if (currentCrCl === 0 && currentEGFR === 0) {
+                showCustomPopup("กรุณากรอกข้อมูลและกดคำนวณก่อน", 'info');
+                adjustmentOutput.innerHTML = `<i class="fas fa-info-circle me-2"></i> ค่าแลปไม่ตรงตามเงื่อนไข`;
+                adjustmentOutput.classList.add('warning');
+                return;
+            }
+
+            const drug = document.getElementById('drug2').value.trim();
+            if (!drug || !drugAdjustData.hasOwnProperty(drug)) {
+                adjustmentOutput.innerHTML = `<i class="fas fa-exclamation-triangle me-2"></i> ไม่พบข้อมูลการปรับยาสำหรับ "${drug}"`;
+                adjustmentOutput.classList.add('error');
+                return;
+            }
+
+            let resultHtml = "";
+            const drugInfo = drugAdjustData[drug];
+
+            // Logic for drug adjustment based on currentEGFR/currentCrCl from Tab 3 calculations
+            if (drug === "Amoxicillin trihydrate") {
+                if (currentEGFR >= 30) {
+                    resultHtml = drugInfo[">= 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentEGFR >=10) {
+                    resultHtml = drugInfo["10-30"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // currentEGFR < 10
+                    resultHtml = drugInfo["< 10"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Co – amoxiclav ( Amoxicillin trihydrate + Potassium clavulanate)") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error'); 
+                } else if (currentCrCl >= 30) {
+                    resultHtml = drugInfo[">= 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl >= 10) {
+                    resultHtml = drugInfo["10-30"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // currentCrCl < 10
+                    resultHtml = drugInfo["< 10"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Cefixime") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl >= 60) {
+                    resultHtml = drugInfo[">= 60"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl > 20) { // 21-59
+                    resultHtml = drugInfo["21-59"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // <= 20
+                    resultHtml = drugInfo["<= 20"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Cefdinir") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl >= 30) {
+                    resultHtml = drugInfo[">= 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else { // currentCrCl < 30
+                    resultHtml = drugInfo["< 30"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Clarithromycin") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl >= 30) {
+                    resultHtml = drugInfo[">= 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else { // currentCrCl < 30
+                    resultHtml = drugInfo["< 30"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Norfloxacin") {
+                if (currentEGFR >= 30) {
+                    resultHtml = drugInfo[">= 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else { // currentEGFR < 30
+                    resultHtml = drugInfo["< 30"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Ciprofloxacin") { 
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl >= 130) {
+                    resultHtml = drugInfo[">= 130"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl > 50 && currentCrCl < 130) { 
+                    resultHtml = drugInfo["50-130"];
+                    adjustmentOutput.classList.add('negative');
+                } else if (currentCrCl >= 30) { // 30-50
+                    resultHtml = drugInfo["30-50"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // currentCrCl < 30
+                    resultHtml = drugInfo["< 30"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Ofloxacin") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl > 50) {
+                    resultHtml = drugInfo["> 50"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl > 20) { // 21-50
+                    resultHtml = drugInfo["21-50"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // <= 20
+                    resultHtml = drugInfo["<= 20"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Levofloxacin") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl >= 50) {
+                    resultHtml = drugInfo[">= 50"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl >= 20) { // 20-49
+                    resultHtml = drugInfo["20-49"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // < 20
+                    resultHtml = drugInfo["< 20"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else if (drug === "Co-trimoxazole (Sulfamethoxazole +Sulfamethoxazole)") {
+                if (currentCrCl === 0) { // เพิ่มเงื่อนไขนี้และต้องเป็นอันดับแรกสุด!
+                    resultHtml = drugInfo["= 0"]; // ใช้ข้อความเฉพาะเมื่อไม่พบข้อมูล CrCl
+                    adjustmentOutput.classList.add('error');
+                } else if (currentCrCl > 30) {
+                    resultHtml = drugInfo["> 30"];
+                    adjustmentOutput.classList.add('positive');
+                } else if (currentCrCl > 15) { // 16-30
+                    resultHtml = drugInfo["16-30"];
+                    adjustmentOutput.classList.add('negative');
+                } else { // <= 15
+                    resultHtml = drugInfo["<= 15"];
+                    adjustmentOutput.classList.add('negative');
+                }
+            } else {
+                 resultHtml = `<i class="fas fa-info-circle me-2"></i> ไม่พบข้อมูลการปรับยาที่ตรงกับค่าไตปัจจุบันสำหรับยานี้`;
+                 adjustmentOutput.classList.add('warning');
+            }
+            
+            adjustmentOutput.innerHTML = resultHtml;
+        }
+
+        // Custom popup function (replaces alert)
+        function showCustomPopup(message, type = 'info') {
+            popup.innerHTML = message;
+            popup.classList.add(type);
+            popup.style.display = 'block';
+            setTimeout(() => {
+                popup.style.display = 'none';
+                popup.classList.remove(type);
+            }, 5000);
+        }
+
+        // --- Event Listeners ---
+
+        // Login button click
+        loginBtn.addEventListener('click', loginUser);
+        // Allow Enter key to login
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                passwordInput.focus();
+            }
+        });
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginUser();
+            }
+        });
+        // Tab switching for both Tab buttons and Navbar links
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const target = tab.getAttribute('data-tab');
+                activateTab(target);
+            });
+        });
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Prevent default link behavior
+                const target = link.getAttribute('data-tab-target');
+                activateTab(target);
+            });
+        });
+        // Tab 1: Drug check
+        drugInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                checkDrug();
+            }
+        });
+        checkBtn.addEventListener("click", checkDrug);
+
+        // Tab 2: Display HN data (updated Event Listener for input)
+        hnInput.addEventListener('input', displayHNData); // Use 'input' event for typing
+        adjustDoseBtn_tab2.addEventListener('click', adjustDose_tab2); // Event listener for new button in Tab 2
+        drug2_tab2.addEventListener('change', updateDiseaseOptions);
+
+        // Reference page functions
+        referenceLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            referenceOverlay.style.display = 'flex';
+        });
+        closeReferenceBtn.addEventListener('click', () => {
+            referenceOverlay.style.display = 'none';
+        });
+        referenceOverlay.addEventListener('click', (e) => {
+            if (e.target === referenceOverlay) {
+                referenceOverlay.style.display = 'none';
+            }
+        });
+        // --- Initial Load ---
+        // Show login page when the web page first loads
+        document.addEventListener('DOMContentLoaded', showLogin);
+
+    </script>
 </body>
 </html>
